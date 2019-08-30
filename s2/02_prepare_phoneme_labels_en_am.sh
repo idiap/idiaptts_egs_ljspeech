@@ -48,6 +48,7 @@ fi
 # Fixed paths.
 dir_src="${IDIAPTTS_ROOT}/src/"
 dir_tools="${IDIAPTTS_ROOT}/../tools/"
+dir_scripts="${IDIAPTTS_ROOT}/scripts/"
 dir_misc="${IDIAPTTS_ROOT}/misc/"
 dir_data=$(realpath "database/")
 
@@ -88,8 +89,8 @@ dir_logs="${dir_labels}/log/"
 dir_mfcc="${dir_labels}/mfc/"
 
 # Create necessary directories.
-mkdir -p ${dir_labels}
-mkdir -p ${dir_logs}
+mkdir -p "${dir_labels}"
+mkdir -p "${dir_logs}"
 
 # Load utts list.
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'utts=($(cat $file_id_list))'
@@ -100,7 +101,7 @@ num_blocks=$(expr ${num_utts} / ${block_size} + 1)
 echo "Get selected utterances..."
 # Combine the selected utterances to a regex pattern.
 pat_size=1000
-rm -f ${dir_labels}/utts_selected.data
+rm -f "${dir_labels}"/utts_selected.data
 iterations=$(expr ${num_utts} / ${pat_size} )
 iterations=$(( 0 > ${iterations} ? 0 : ${iterations} ))
 for block in $(eval echo "{0..${iterations}}"); do
@@ -110,11 +111,11 @@ for block in $(eval echo "{0..${iterations}}"); do
     utts_pat=$(echo ${utts[@]:$start_index:$pat_size}|sed 's/ /\\|/g'|sed 's#\/#\\/#g')
 #    echo ${utts_pat[@]}
     # Select those labes of utts.data which belong to the selected utterances.
-    sed -n "/${utts_pat}/p" ${dir_data}/utts.data >> ${dir_labels}/utts_selected.data
+    sed -n "/${utts_pat}/p" "${dir_data}"/utts.data >> "${dir_labels}"/utts_selected.data
     ##cat ${dir_data}/utts.data | grep -wE "${utts_pat}" >| ${dir_labels}/utts_selected.data
 done
-sed -i 's/[()]//g' ${dir_labels}/utts_selected.data
-sed -i 's/ /'$'\t''/' ${dir_labels}/utts_selected.data  # Convert first space into tab to match expected format of tts_frontend.
+sed -i 's/[()]//g' "${dir_labels}"/utts_selected.data
+sed -i 's/ /'$'\t''/' "${dir_labels}"/utts_selected.data  # Convert first space into tab to match expected format of tts_frontend.
 
 # Split into working blocks.
 if [ "$num_blocks" -gt "99" ]; then
@@ -142,15 +143,15 @@ done
 
 # Create labels for all utterance blocks. Send commands as job array.
 echo "Create labels..."
-./${cpu_1d_cmd} JOB=1:${num_blocks} ${dir_logs}/utts_selected.dataJOB.log ${dir_tools}/tts_frontend/English/makeLabels.sh ${dir_tools}/festival/ ${dir_labels}/utts_selected.data_blockJOB AM ${dir_labels}/
+./${cpu_1d_cmd} JOB=1:${num_blocks} "${dir_logs}"/utts_selected.dataJOB.log "${dir_scripts}"/tts_frontend/English/makeLabels.sh "${dir_tools}"/festival/ ${dir_labels}/utts_selected.data_blockJOB AM "${dir_labels}"/
 
 # Remove intermediate files.
 rm -f ${dir_labels}/utts_selected.data
 eval rm -f ${dir_labels}/utts_selected.data_block{0..${num_blocks}}  # eval command required because otherwise brace expansion { .. } happens before $ expansion
 
 # Remove mono labels and clean up, create copy of labels for different speakers in subdirectories.
-mv ${dir_labels}/labels/full ${dir_labels}/full_no_align
-rm -Rf ${dir_labels}/labels/
+mv "${dir_labels}"/labels/full "${dir_labels}"/full_no_align
+rm -Rf "${dir_labels}"/labels/
 for file_id in ${utts[@]}; do
     if [[ "${file_id}" == *\/* ]]; then
         speaker_id=${file_id%%/*}
@@ -158,11 +159,11 @@ for file_id in ${utts[@]}; do
         if [ -n ${speaker_id} ]; then
             utt_id=${file_id##*/}
 #            echo Copy ${utt_id} to ${speaker_id}/${utt_id}
-            mkdir -p ${dir_labels}/full_no_align/${speaker_id}
-            cp ${dir_labels}/full_no_align/${utt_id}.lab  ${dir_labels}/full_no_align/${speaker_id}/
+            mkdir -p "${dir_labels}"/full_no_align/${speaker_id}
+            cp "${dir_labels}"/full_no_align/${utt_id}.lab  "${dir_labels}"/full_no_align/${speaker_id}/
         fi
     fi
 done
 
 # Remove intermediate files.
-eval rm -f ${dir_labels}/${name_file_id_list}_block{0..${num_blocks}}
+eval rm -f "${dir_labels}"/${name_file_id_list}_block{0..${num_blocks}}

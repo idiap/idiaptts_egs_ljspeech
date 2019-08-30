@@ -46,7 +46,7 @@ def main():
         egs_dir = os.path.realpath(args.egs_dir)
         proj_dir = os.path.dirname(os.path.dirname(os.path.dirname(egs_dir)))
     tools_dir = os.path.join(proj_dir, "tools")
-    tts_frontend_dir = os.path.join(proj_dir, "tools", "tts_frontend")
+    tts_frontend_dir = os.path.join(os.environ['IDIAPTTS_ROOT'], "scripts", "tts_frontend")
 
     hparams.work_dir = os.path.join(egs_dir, "pretrained")
     hparams.synth_dir = os.path.join(egs_dir, "TTSModelDMAM") if args.out_dir is None else os.path.realpath(args.out_dir)
