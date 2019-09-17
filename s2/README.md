@@ -1,5 +1,6 @@
 **Requirements:**
-- Install the main requirements by follow the installation process in the *INSTALL.md* file in the root directory.  
+- Install IdiapTTS
+- Install requirements by running ``conda install --yes --file requirements.txt``  
 - Run ``source cmd.sh``  
 - Install r9y9's WaveNet implementation (only the library) by running  
 `pip install wavenet_vocoder` 
@@ -33,7 +34,7 @@ Run `./05_prepare_WORLD_labels.sh full <num_workers> ` to extract acoustic featu
 TODO
 
 ### WaveNet
-This framework uses the WaveNet [implementation](https://github.com/r9y9/wavenet_vocoder) of Ryuichi (r9y9) Yamamoto via a wrapper class. It is trained by running `python MyWaveNetVocoderTrainer.py`. The class contains similar hyper-parameters than those reported by Yamamoto. The default configuration uses 256 bit mu-law quantisation with 12 layers divided into 2 stacks with a kernel size of 2. The MoL configuration is commented out, but can be used instead of mu-law quantisation. However, the MoL configuration has lead to background noise until now.
+This framework uses the WaveNet [implementation](https://github.com/r9y9/wavenet_vocoder) of Ryuichi (r9y9) Yamamoto via a wrapper class. It is trained by running `python MyWaveNetVocoderTrainer.py`. The class contains similar hyper-parameters as those reported by Yamamoto. The default configuration uses 256 bit mu-law quantisation with 12 layers divided into 2 stacks with a kernel size of 2. The MoL configuration is commented out, but can be used instead of mu-law quantisation. However, the MoL configuration has lead to background noise until now.
 
 # Synthesis
 TODO
