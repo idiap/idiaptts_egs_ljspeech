@@ -106,7 +106,7 @@ def main():
 
     hparams.synth_gen_figure = True
     trainer.synth(hparams, synth_file_id_list)
-    # trainer.synth_ref(synth_file_id_list, hparams)
+    # trainer.synth_ref(hparams, synth_file_id_list)
     # trainer.gen_figure(hparams, synth_file_id_list)
 
 

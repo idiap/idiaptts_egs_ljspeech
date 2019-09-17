@@ -93,21 +93,21 @@ def main():
     hparams.layers = 12
     hparams.stacks = 2
     hparams.kernel_size = 2
-    hparams.max_input_train_sec = 1.5
-    hparams.max_input_test_sec = 2.0
+    hparams.add_hparam("max_input_train_sec", 1.5)
+    hparams.add_hparam("max_input_test_sec", 2.0)
 
-    # MoL parameter setup.
+    # # MoL parameter setup.
     # hparams.input_type = "raw"
     # hparams.hinge_regularizer = True
     # hparams.quantize_channels = 65536
     # num_mixtures = 10
     # hparams.out_channels = num_mixtures * 3  # num_mixtures * 3 (pi, mean, log_scale)
-
+    #
     # hparams.layers = 30
     # hparams.stacks = 3
     # hparams.kernel_size = 3
-    # hparams.max_input_train_sec = 0.6
-    # hparams.max_input_test_sec = 2.0
+    # hparams.add_hparam("max_input_train_sec", 0.6)
+    # hparams.add_hparam("max_input_test_sec", 2.0)
 
     # Extra layer for conditional features.
     hparams.upsample_conditional_features = True
@@ -139,7 +139,7 @@ def main():
     trainer = MyWaveNetVocoderTrainer(hparams)
     trainer.init(hparams)
     trainer.train(hparams)
-    trainer.save_for_vocoding(hparams.model_name)
+    # trainer.save_for_vocoding(hparams.model_name)
 
     synth_file_id_list = random.choices(trainer.id_list_test, k=3)
     for index, id_name in enumerate(synth_file_id_list):

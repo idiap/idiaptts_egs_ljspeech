@@ -30,7 +30,7 @@ if [ "${queue}" != "cpu" ]; then
     fi
 fi
 
-grid_args="-l ${queue} -l hostname=vgn*|jurasix* -S $(which python3) -v PYTHONPATH -cwd"
+grid_args="-l ${queue} -l hostname=vgn*|jurasix* -S $(which python3) -v PYTHONPATH -v IDIAPTTS_ROOT -cwd"
 
 if [ "${queue}" == "cpu" ]; then  # [ == ] literal matching
     $(which python3) RunTTSModel.py
