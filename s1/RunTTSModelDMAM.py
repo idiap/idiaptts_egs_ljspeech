@@ -31,6 +31,7 @@ def main():
                         help="Directory containing this script. Needed to run successfully on the grid.",
                         type=str, dest="egs_dir", default=None, required=False)
     parser.add_argument("input_strings", type=str, nargs='+', help="A text to synthesise.")
+
     args = parser.parse_args()
     input_strings = args.input_strings
     logging.info("Received {} utterance(s) for synthesis.".format(len(input_strings)))
@@ -44,7 +45,7 @@ def main():
         proj_dir = os.path.dirname(os.path.dirname(idiaptts.__file__))
     else:
         egs_dir = os.path.realpath(args.egs_dir)
-        proj_dir = os.path.dirname(os.path.dirname(os.path.dirname(egs_dir)))
+        proj_dir = os.path.dirname(os.path.dirname(os.path.dirname(egs_dir)))  # TODO: When tools install works, this has to be the same as above.
     tools_dir = os.path.join(proj_dir, "tools")
     tts_frontend_dir = os.path.join(os.environ['IDIAPTTS_ROOT'], "scripts", "tts_frontend")
 

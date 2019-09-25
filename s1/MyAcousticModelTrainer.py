@@ -56,7 +56,7 @@ def main():
     hparams = MyAcousticModelTrainer.create_hparams()  # TODO: Parse input for hparams.
 
     # General parameters
-    hparams.num_questions = 425
+    hparams.num_questions = 609
     hparams.voice = "full"
     hparams.work_dir = os.path.realpath(os.path.join("experiments", hparams.voice))
     hparams.data_dir = os.path.realpath("database")
