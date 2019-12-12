@@ -1,6 +1,6 @@
 **Requirements:**
 - Install the main requirements by follow the installation process in the *INSTALL.md* file in the root directory.  
-- Download pre-trained models from [here](https://www.idiap.ch/~bschnell/data/IdiapTTS/pretrained_LJSpeech_s1.zip) and place everything from inside the downloaded archive into the *pretrained* folder.
+- Download pre-trained models from [here](https://www.idiap.ch/resource/software/idiapTTS/pretrained_LJSpeech_s1.zip) and place everything from inside the downloaded archive into the *pretrained* folder.
 - Run ``source cmd.sh``  
 
 
