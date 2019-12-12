@@ -53,6 +53,7 @@ dir_src="${IDIAPTTS_ROOT}/src/"
 
 # Magic variables.
 demo_set_size=300
+small_set_size=5535
 target_frame_rate=16000
 random_seed=42
 
@@ -104,6 +105,7 @@ mkdir -p ${dir_txt}
 
 file_id_list_demo="${dir_data}/file_id_list_demo.txt"
 file_id_list="${dir_data}/file_id_list_full.txt"
+file_id_list_small="${dir_data}/file_id_list_small.txt"
 
 # Collect utterance ids of audio files.
 echo "Collect utterance ids of audio files..."
@@ -112,6 +114,8 @@ utts_full=$(ls "${db_path}"/wavs/)
 utts_full="${utts_full//.wav/ }"  # Remove the wav extension.
 utts_full=($utts_full)  # Convert to array.
 printf "%s\n" "${utts_full[@]}" >| ${file_id_list}
+utts_small=("${utts_full[@]:0:$small_set_size}")
+printf "%s\n" "${utts_small[@]}" >| ${file_id_list_small}
 # Create the demo set.
 utts_full=( $(shuf --random-source=<(get_seeded_random $random_seed) -e ${utts_full[@]}))  # Shuffle array.
 utts_demo=("${utts_full[@]:0:$demo_set_size}")
@@ -132,7 +136,7 @@ for utt in "${utts_full[@]}"; do
 done
 
 # Down sampling.
-echo "Downsample files to frame rate: ${target_frame_rate} ..."
+echo "Downsample files to frame rate: ${target_frame_rate}..."
 rm -r -f "${dir_data}/wav_org"
 mv "${dir_audio}" "${dir_data}/wav_org"
 mkdir -p "${dir_audio}"
@@ -206,6 +210,7 @@ if [ "$silence_removal" = true ]; then
                 --dir_wav ${dir_data}/wav_org_silence/ \
                 --dir_out ${dir_data}/wav/ \
                 --file_id_list ${dir_data}/${name_file_id_list}_blockJOB \
+                --silence_db -30 \
                 --min_silence_ms 10
 
     # Copy files not touched in this remove silence step.
